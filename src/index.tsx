@@ -10,38 +10,39 @@ import ForgeUI, {
 } from '@forge/ui'
 import { fetch } from '@forge/api'
 
-const postData = (url: string, data: string) => {
+const postData =  async (url: string, data: string) => {
   // Default options are marked with *
-  return fetch(url, {
+  const res = await fetch(url, {
     body: data, // must match 'Content-Type' header
     headers: {
-      Authorization:
-      'Bearer sl.ho36tpauLbzXOXVts-lzgvyoGnD8hADfTXEaqDqt8AkzXO634xgGeIm4YluT7EGL0gOuVFmZWT1upWpY8ZbIvFPMGn5A5l0EqNJ3q5r6OZKi9dxWf9A',
-      'Dropbox-API-Arg': '{"path": "/Homework/math/test.txt"}',
-      'Content-Type': 'application/octet-stream',
+      'Content-Type': 'application/json',
     },
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     redirect: 'follow', // manual, *follow, error
-  }).then((response) => response.json()) // 輸出成 json
+  })
+  return res.json()
 }
 
 const fetchCommentsForContent = async (contentId) => {
-  const res = await api
-    .asUser()
-    .requestConfluence(route`/rest/api/content/${contentId}/child/comment`)
-
-  const data = await res.json()
+  const response = await api.asApp().requestConfluence(route`/wiki/rest/api/space`, {
+    headers: {
+      'Accept': 'application/json'
+    }
+  });
+  
+  console.log(`Response: ${response.status} ${response.statusText}`);
+  console.log(await response.json());
+  const data = await response.json()
   return data.results
+}
+const fetchPOSTcontent = async () => {
+  const data = await postData('https://feb2-51-15-52-186.ngrok.io', '{"age23": 42}')
+  return JSON.stringify(data)
 }
 
 const App = () => {
-  const fetchPOSTcontent = async () => {
-    postData('https://content.dropboxapi.com/2/files/upload', `{answer: 42}`)
-      .then((data) => console.log(data)) // JSON from `response.json()` call
-      .catch((error) => console.error(error))
-  }
 
-  const [count, setCount] = useState(0)
+  const [count] = useState(async () => await fetchPOSTcontent(),)
   const context = useProductContext()
   const [comments] = useState(
     async () => await fetchCommentsForContent(context.contentId),
@@ -55,14 +56,8 @@ const App = () => {
 
   return (
     <Fragment>
-      <Button
-        text={`${count}`}
-        onClick={() => {
-          setCount(count + 1)
-          fetchPOSTcontent()
-        }}
-      />
-      <Text>Hello test!</Text>
+      <Button text={comments[0].name} onClick={() => {}} />
+      <Text>{count}</Text>
     </Fragment>
   )
 }

@@ -2,8 +2,8 @@ modules:
   macro:
     - key: hello-world-app-hello-world
       function: main
-      title: hello-world-app for Muzamint team
-      description: Inserts Hello world!
+      title: save conflunce page to ipfs
+      description: save data to ipfs!
   function:
     - key: main
       handler: index.run
@@ -11,7 +11,16 @@ app:
   id: ari:cloud:ecosystem::app/f2daba15-0738-47a9-8015-f95d77f04124
   name: hello-world-app
 permissions:
+  scopes:
+    - 'read:confluence-content.all'
+    - 'read:jira-work'
+    - 'write:jira-work'
+    - 'write:confluence-content'
+    - 'read:jira-user'
+    - 'manage:jira-project'
+    - 'manage:jira-configuration'
+    - 'read:confluence-space.summary'
   external:
     fetch:
       backend:
-        - 'https://content.dropboxapi.com'
+        - '*.ngrok.io'
