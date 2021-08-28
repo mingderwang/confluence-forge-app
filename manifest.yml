@@ -1,0 +1,17 @@
+modules:
+  macro:
+    - key: hello-world-app-hello-world
+      function: main
+      title: hello-world-app for Muzamint team
+      description: Inserts Hello world!
+  function:
+    - key: main
+      handler: index.run
+app:
+  id: ari:cloud:ecosystem::app/f2daba15-0738-47a9-8015-f95d77f04124
+  name: hello-world-app
+permissions:
+  external:
+    fetch:
+      backend:
+        - 'https://content.dropboxapi.com'
